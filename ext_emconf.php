@@ -32,8 +32,8 @@ $EM_CONF[$_EXTKEY] = [
 		'depends' => [
 			'typo3' => '7.6.0-7.6.99',
 			'solr' => '5.0.0-5.1.99',
-            'pt_extbase' => '',
-        ],
+			'pt_extbase' => '2.3.0-2.3.99',
+		],
 		'conflicts' => [
 		],
 		'suggests' => [
