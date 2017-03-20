@@ -1,0 +1,6 @@
+plugin.tx_ptsolrsitemap.settings {
+    sys_languages_cores {
+        de = dev-core-de-de_DE
+        en = dev-core-de-en_EN
+    }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "punktde/pt_solr_sitemap",
+  "type": "typo3-cms-extension",
+  "description": "Extension for creating sitemaps from solr index queues.",
+  "keywords": [
+    "TYPO3",
+    "extension"
+  ],
+  "homepage": "http://punkt.de",
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=7.6.0,<8.0",
+    "apache-solr-for-typo3/solr": "~5.1.0",
+    "punktde/pt_extbase": "~2.2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PunktDe\\PtSolrSitemap\\": "Classes"
+    },
+    "classmap": [
+       "Classes/"
+    ]
+  },
+  "replace": {
+    "pt_solr_sitemap": "self.version",
+    "typo3-ter/pt_solr_sitemap": "self.version"
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}
