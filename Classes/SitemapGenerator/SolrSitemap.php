@@ -49,6 +49,9 @@ class SolrSitemap
     /** @var array $settings */
     protected $settings = [];
 
+    /** @var array $solrSettings */
+    protected $solrSettings = [];
+
     /** @var string $sitemapDirectory */
     protected $sitemapDirectory = 'fileadmin/tx_ptsolrsitemap/';
 
@@ -66,6 +69,7 @@ class SolrSitemap
     {
         $this->site = $site;
         $this->settings = \Tx_PtExtbase_Div::returnTyposcriptSetup($this->site->getRootPageId(), 'plugin.tx_ptsolrsitemap.settings.');
+        $this->solrSettings = \Tx_PtExtbase_Div::returnTyposcriptSetup($this->site->getRootPageId(), 'plugin.tx_solr.solr.');
 
         $this->checkAndCreateSitemapFolder();
     }
@@ -93,6 +97,10 @@ class SolrSitemap
     protected function doGenerateSitemap()
     {
         $sysLanguagesCores = $this->settings['sys_languages_cores.'];
+        $solrport = 8983;
+        if (isset($this->solrSettings['port'])) {
+            $solrport = intval($this->solrSettings['port']);
+        }
 
         if (sizeof($sysLanguagesCores) == 0) {
             throw new \Exception('Missing configuration - no solrcores for sys_languages defined', 1489647267);
@@ -100,7 +108,7 @@ class SolrSitemap
 
         foreach ($sysLanguagesCores as $sysLanguage => $solrCore) {
             /** @var SolrDocumentProvider $solrDocumentProvider */
-            $solrDocumentProvider = $this->objectManager->get(SolrDocumentProvider::class, $solrCore);
+            $solrDocumentProvider = $this->objectManager->get(SolrDocumentProvider::class, $solrCore, 50, $solrport);
             if ($solrDocumentProvider instanceof SolrDocumentProvider) {
                 $this->writeXmlFile($sysLanguage, $solrDocumentProvider);
             }

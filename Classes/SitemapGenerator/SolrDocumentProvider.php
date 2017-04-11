@@ -33,6 +33,9 @@ class SolrDocumentProvider
     /** @var string $solrcore */
     private $solrcore;
 
+    /** @var integer $solrport */
+    private $solrport;
+
     /** @var integer $resultOffset */
     private $resultOffset = 0;
 
@@ -42,13 +45,15 @@ class SolrDocumentProvider
 
     /**
      * SolrDocumentProvider constructor.
-     * @param string $solrcore
+     * @param $solrcore
      * @param integer $pagerSize
+     * @param integer $solrport
      */
-    public function __construct($solrcore, $pagerSize = 50)
+    public function __construct($solrcore, $pagerSize = 50, $solrport = 8983)
     {
         $this->setSolrcore($solrcore);
         $this->setPagerSize($pagerSize);
+        $this->setSolrport($solrport);
     }
 
     /**
@@ -58,7 +63,7 @@ class SolrDocumentProvider
     {
         $solrDocumentEntries = [];
         $this->setResultOffset(0);
-        while($docs = $this->getNextDocumentEntries()) {
+        while ($docs = $this->getNextDocumentEntries()) {
             $solrDocumentEntries = array_merge($solrDocumentEntries, $docs);
         }
         return $solrDocumentEntries;
@@ -85,7 +90,7 @@ class SolrDocumentProvider
     {
         $solrDocumentEntries = [];
         $this->totalResults = 0;
-        $content = file_get_contents('http://localhost:8983/solr/' . $solrCore . '/select?q=*:*&wt=json&rows=' . $this->getPagerSize() . '&start=' . $this->getResultOffset());
+        $content = file_get_contents('http://localhost:' . $this->getSolrport() . '/solr/' . $solrCore . '/select?q=*:*&wt=json&rows=' . $this->getPagerSize() . '&start=' . $this->getResultOffset());
         $json = json_decode($content, true);
         if ($json !== null) {
             $this->totalResults = intval($json['response']['numFound']);
@@ -155,6 +160,22 @@ class SolrDocumentProvider
     public function getTotalResults()
     {
         return $this->totalResults;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getSolrport()
+    {
+        return $this->solrport;
+    }
+
+    /**
+     * @param integer $solrport
+     */
+    public function setSolrport($solrport)
+    {
+        $this->solrport = $solrport;
     }
 
 }
