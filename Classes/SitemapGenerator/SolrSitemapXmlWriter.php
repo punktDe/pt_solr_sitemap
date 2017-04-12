@@ -32,13 +32,17 @@ class SolrSitemapXmlWriter
     /** @var string $xmlFilename */
     private $xmlFilename;
 
+    /** @var string $baseUrl */
+    private $baseUrl;
+
 
     /**
      * XmlWriter constructor.
      */
-    public function __construct($xmlFilename)
+    public function __construct($xmlFilename, $baseUrl = '')
     {
         $this->xmlFilename = $xmlFilename;
+        $this->baseUrl = $baseUrl;
     }
 
 
@@ -108,7 +112,11 @@ class SolrSitemapXmlWriter
      */
     protected function getFullUrl($sitemapEntryUrl)
     {
-        return GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . ltrim($sitemapEntryUrl , '/');
+        if (strlen($this->baseUrl) > 0) {
+            return $this->baseUrl . '/' . ltrim($sitemapEntryUrl, '/');
+        } else {
+            return GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . ltrim($sitemapEntryUrl, '/');
+        }
     }
 
 }

@@ -124,9 +124,10 @@ class SolrSitemap
     {
         $rootLine = BackendUtility::BEgetRootLine($this->site->getRootPageId());
         $host = BackendUtility::firstDomainRecord($rootLine);
+        $baseUrl = ($this->settings['https'] == 1) ? 'https://' . $host : 'http://' . $host;
         $filename = $this->absoluteSitemapPath . 'sitemap-' . $host . '-' . $sysLanguage . '.xml';
         try {
-            $solrSitemapXmlWriter = $this->objectManager->get(SolrSitemapXmlWriter::class, $filename);
+            $solrSitemapXmlWriter = $this->objectManager->get(SolrSitemapXmlWriter::class, $filename, $baseUrl);
         } catch (Exception $e) {
             $solrSitemapXmlWriter = null;
         }
